@@ -65,6 +65,7 @@
   const dispatch = createEventDispatcher<{
     load: maplibregl.Map;
     error: Error;
+    click: maplibregl.MapMouseEvent & { map: maplibregl.Map };
     movestart: maplibregl.MapMouseEvent & { map: maplibregl.Map };
     moveend: maplibregl.MapMouseEvent & { map: maplibregl.Map };
     zoomstart: maplibregl.MapLibreZoomEvent & { map: maplibregl.Map };
@@ -163,6 +164,10 @@
         cooperativeGestures,
       })
     );
+
+    $mapInstance.on('click', (e) => {
+      dispatch('click', { ...e, map: $mapInstance });
+    });
 
     $mapInstance.on('load', (e) => {
       e.target.getContainer().setAttribute('data-testid', 'map');
